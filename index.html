@@ -749,7 +749,7 @@ function parseMD(raw){
   }
   if(inUl)html+='</ul>';return html;
 }
-function inline(s){return esc(s).replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/\*(.+?)\*/g,'<em>$1</em>').replace(/`(.+?)`/g,'<code>$1</code>');}
+function inline(s){return esc(s).replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/\*(.+?)\*/g,'<em>$1</em>').replace(/`(.+?)`/g,'<code>$1</code>').replace(/~~(.+?)~~/g,'<del>$1</del>');}
 function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 function getNoteText(date){return localStorage.getItem('md_p3_'+date)||'';}
 function saveMD(id){
@@ -1556,6 +1556,19 @@ function init(){
   updateSyncUI();
   if(GAS.url)loadAndRenderDo();
   setInterval(updateNow,60000);
+  
+  // 탭키 들여쓰기
+  document.querySelectorAll('.md-edit').forEach(ta=>{
+    ta.addEventListener('keydown',e=>{
+      if(e.key==='Tab'){
+        e.preventDefault();
+        const start=ta.selectionStart,end=ta.selectionEnd;
+        ta.value=ta.value.slice(0,start)+'  '+ta.value.slice(end);
+        ta.selectionStart=ta.selectionEnd=start+2;
+      }
+    });
+  });
+
   const overlays=['presetOv','newBlockOv','editOv','addActOv','settingsOv','memoOv'];
   overlays.forEach(id=>{
     document.getElementById(id).addEventListener('click',e=>{

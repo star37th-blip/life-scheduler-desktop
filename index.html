@@ -295,6 +295,7 @@ input[type="color"]{width:32px;height:28px;border:1px solid var(--bd);background
     <div class="sync-dot off" id="syncDot"></div>
     <span class="sync-lbl" id="syncLbl">GAS 미연결</span>
     <button class="sync-btn" id="syncNowBtn" onclick="syncNow()" style="display:none">↑ 동기화</button>
+    <button class="sync-btn" id="pullNowBtn" onclick="pullNow()" style="display:none">↓ 불러오기</button>
     <button class="sync-btn" onclick="resetPanels()" title="패널 초기화">↔ 초기화</button>
     <button class="gear-btn" onclick="openSettings()">⚙</button>
   </div>
@@ -696,10 +697,12 @@ function setSyncStatus(state,msg){
 function updateSyncUI(){
   const connected=!!GAS.url;
   document.getElementById('syncNowBtn').style.display=connected?'':'none';
+  document.getElementById('pullNowBtn').style.display=connected?'':'none';
   setSyncStatus(connected?'ok':'off',connected?'GAS 연결됨':'GAS 미연결');
 }
 function hhmm(){const n=new Date();return `${p2(n.getHours())}:${p2(n.getMinutes())}`;}
 function syncNow(){if(GAS.url){GAS.syncDay(cur);loadAndRenderDo();}}
+function pullNow(){if(GAS.url){GAS.pullDay(cur);}}
 
 // ── SETTINGS ──
 function openSettings(){
